@@ -8,7 +8,7 @@ const dots_to_braille = [0, 3, 1, 4, 2, 5, 6, 7]
  *     1 2
  *     3 4
  *     5 6
- *   	7 8
+ *   	 7 8
  * The input byte’s most significant bit represents dot 1, and the least
  * significant bit dot 8.
  * See: https://en.wikipedia.org/wiki/Braille_Patterns
@@ -30,6 +30,16 @@ fn dots_to_braille_rune(dots u8) rune {
 	return rune(0x2800 + mask)
 }
 
+fn memoize_dots_to_braille_rune() [256]rune {
+  mut memo := [256]rune{}
+
+  for index in 0..256 {
+    memo[index] = dots_to_braille_rune(index)
+  }
+
+  return memo
+}
+
 /** 
  * Converts a 2D boolean buffer into a 2D grid of Braille runes.
  *
@@ -46,7 +56,7 @@ fn dots_to_braille_rune(dots u8) rune {
  *     [][]rune - A 2D array of runes where each rune corresponds to one Braille
  *                character.
  */
-fn buffer_to_braille(buffer [][]bool) [][]rune {
+fn buffer_to_braille(buffer [][]bool, braille_mapping [256]rune) [][]rune {
   out_rows := buffer.len/4
   out_cols := buffer[0].len/2
   mut output := [][]rune{len: out_rows, init: []rune{len: out_cols}}
@@ -73,6 +83,7 @@ fn buffer_to_braille(buffer [][]bool) [][]rune {
 }
 
 fn main() {
+  braille_mapping := memoize_dots_to_braille_rune()
 	mut buffer := [][]bool{len: 48, init: []bool{len: 40}}
 
   minr := 16*16
@@ -90,7 +101,7 @@ fn main() {
 		}
 	}
 
-  output := buffer_to_braille(buffer)
+  output := buffer_to_braille(buffer, braille_mapping)
   for row in output {
     for character in row {
       print(character)
