@@ -57,6 +57,18 @@ pub fn (mut canvas Canvas) image(image stbi.Image) ! {
 	}
 }
 
+pub fn (canvas Canvas) str() string {
+	return canvas.output().map(
+		fn (row []rune) string {
+			return row.map(
+				fn (r rune) string {
+					return r.str()
+				}
+			).join('')
+		}
+	).join_lines()
+}
+
 pub struct Canvas {
 	mut:
 		layers [][]bool

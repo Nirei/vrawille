@@ -1,6 +1,6 @@
 import nirei.vrawille
 
-fn draw_crescent() &vrawille.Canvas {
+fn main() {
   width, height := 48, 48
   mut canvas := vrawille.Canvas.new(width, height)
 
@@ -18,18 +18,6 @@ fn draw_crescent() &vrawille.Canvas {
       }
 		}
 	}
-
-	return canvas
-}
-
-fn main() {
-  canvas := draw_crescent()
-
-  output := canvas.output()
-	for row in output {
-		for character in row {
-			print(character)
-		}
-		print('\n')
-	}
+	
+	println(canvas)
 }
