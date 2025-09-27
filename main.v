@@ -22,6 +22,10 @@ pub fn (mut canvas Canvas) unset(x int, y int) {
 	canvas.layers[y][x] = false
 }
 
+pub fn (mut canvas Canvas) toggle(x int, y int) {
+	canvas.layers[y][x] = !canvas.layers[y][x]
+}
+
 pub fn (mut canvas Canvas) clear() {
 	width, height := canvas.size()
 	canvas.layers = create_buffer(width, height)
