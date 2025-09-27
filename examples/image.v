@@ -10,5 +10,5 @@ fn main() {
 	canvas.image(image) or { exit(1) }
 	image.free()
 
-  println(canvas)
+  println(*canvas)
 }

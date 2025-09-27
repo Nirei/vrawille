@@ -49,7 +49,7 @@ canvas.set(23,26)
 canvas.set(22,27)
 
 // Draw your canvas
-println(canvas)
+println(*canvas)
 ```
 
 The preceding code should produce this result:
@@ -68,3 +68,14 @@ The preceding code should produce this result:
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ```
+
+You can find some more usage examples in the [examples](examples) folder.
+
+## Contributing
+
+Feel free to submit Issues and Pull Requests to [vrawille's repository](https://github.com/Nirei/vrawille) directly.
+
+## License
+
+Vrawille is Free Software, licensed under the terms of the Apache License 2.0
+of which you can find a copy in our [LICENSE](LICENSE) file.

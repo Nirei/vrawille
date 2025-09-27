@@ -61,7 +61,7 @@ pub fn (mut canvas Canvas) image(image stbi.Image) ! {
 	}
 }
 
-pub fn (canvas Canvas) str() string {
+pub fn (canvas &Canvas) str() string {
 	return canvas.output().map(
 		fn (row []rune) string {
 			return row.map(
