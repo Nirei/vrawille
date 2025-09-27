@@ -68,7 +68,7 @@ pub fn (canvas Canvas) str() string {
 				fn (r rune) string {
 					return r.str()
 				}
-			).join()
+			).join('')
 		}
 	).join_lines()
 }
