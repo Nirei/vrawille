@@ -1,7 +1,7 @@
 import nirei.vrawille
 import stbi
 
-fn draw_wolf() &Canvas {
+fn draw_wolf() &vrawille.Canvas {
 	width, height := 320, 180
   mut canvas := vrawille.Canvas.new(width, height)
 

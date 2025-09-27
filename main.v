@@ -57,12 +57,12 @@ pub fn (mut canvas Canvas) image(image stbi.Image) ! {
 	}
 }
 
-/* private code */
-
-struct Canvas {
+pub struct Canvas {
 	mut:
 		layers [][]bool
 }
+
+/* private code */
 
 const grayscale_ratio_red = 0.2126
 const grayscale_ratio_green = 0.7152

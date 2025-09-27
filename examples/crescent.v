@@ -1,6 +1,6 @@
 import nirei.vrawille
 
-fn draw_crescent() &Canvas {
+fn draw_crescent() &vrawille.Canvas {
   width, height := 48, 48
   mut canvas := vrawille.Canvas.new(width, height)
 
