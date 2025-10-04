@@ -22,5 +22,5 @@ fn main() {
 		}
 	}
 	
-	println(canvas)
+	println(*canvas)
 }

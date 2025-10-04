@@ -1,7 +1,7 @@
 module vrawille
 
 import stbi { Image, resize_uint8 }
-import math { min, max }
+import math { min, max, cos, sin, radians }
 
 // Canvas.new creates a new canvas of the specified size
 pub fn Canvas.new(width int, height int) &Canvas {
@@ -27,21 +27,25 @@ pub fn (mut canvas Canvas) clear() {
 
 // get returns the status of the pixel in the given coordinates
 pub fn (mut canvas Canvas) get(x int, y int) bool {
+	if !canvas.valid_coordinates(x, y) { return false }
 	return canvas.layers[y][x]
 }
 
 // set defines the status of the pixel in the given coordinates to active
 pub fn (mut canvas Canvas) set(x int , y int) {
+	if !canvas.valid_coordinates(x, y) { return }
 	canvas.layers[y][x] = true
 }
 
 // unset defines the status of the pixel in the given coordinates to inactive
 pub fn (mut canvas Canvas) unset(x int, y int) {
+	if !canvas.valid_coordinates(x, y) { return }
 	canvas.layers[y][x] = false
 }
 
 // toggle inverts the status of the pixel in the given coordinates
 pub fn (mut canvas Canvas) toggle(x int, y int) {
+	if !canvas.valid_coordinates(x, y) { return }
 	canvas.layers[y][x] = !canvas.layers[y][x]
 }
 
@@ -73,10 +77,10 @@ pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius
 	for index in 0..sides {
 		a := index * degree
 		b := (index + 1) * degree
-		x1 := int((center_x + math.cos(math.radians(a))) * (radius + 1) / 2)
-		y1 := int((center_y + math.sin(math.radians(a))) * (radius + 1) / 2)
-		x2 := int((center_x + math.cos(math.radians(b))) * (radius + 1) / 2)
-		y2 := int((center_y + math.sin(math.radians(b))) * (radius + 1) / 2)
+		x1 := int((center_x + cos(radians(a))) * (radius + 1) / 2)
+		y1 := int((center_y + sin(radians(a))) * (radius + 1) / 2)
+		x2 := int((center_x + cos(radians(b))) * (radius + 1) / 2)
+		y2 := int((center_y + sin(radians(b))) * (radius + 1) / 2)
 
     canvas.line(x1, y1, x2, y2)
 	}
@@ -231,4 +235,9 @@ fn buffer_to_braille(buffer [][]bool, braille_mapping [256]rune) [][]rune {
 /** Initialize an empty buffer */
 fn create_buffer(width int, height int) [][]bool {
  return [][]bool{len: height, init: []bool{len: width}}
+}
+
+pub fn (mut canvas Canvas) valid_coordinates(x int, y int) bool {
+	width, height := canvas.size()
+	return x > 0 && x < width && y > 0 && y < height
 }
