@@ -1,6 +1,7 @@
 module vrawille
 
 import stbi
+import math { min, max }
 
 pub fn Canvas.new(width int, height int) &Canvas {
 	return &Canvas { layers: create_buffer(width, height) }
@@ -10,8 +11,17 @@ pub fn (canvas Canvas) size() (int, int) {
 	return canvas.layers[0].len, canvas.layers.len
 }
 
-pub fn (canvas Canvas) output() [][]rune {
+pub fn (canvas Canvas) rows() [][]rune {
 	return buffer_to_braille(canvas.layers, dots_to_braille_rune_map)
+}
+
+pub fn (mut canvas Canvas) clear() {
+	width, height := canvas.size()
+	canvas.layers = create_buffer(width, height)
+}
+
+pub fn (mut canvas Canvas) get(x int, y int) bool {
+	return canvas.layers[y][x]
 }
 
 pub fn (mut canvas Canvas) set(x int , y int) {
@@ -26,9 +36,38 @@ pub fn (mut canvas Canvas) toggle(x int, y int) {
 	canvas.layers[y][x] = !canvas.layers[y][x]
 }
 
-pub fn (mut canvas Canvas) clear() {
-	width, height := canvas.size()
-	canvas.layers = create_buffer(width, height)
+pub fn (mut canvas Canvas) line(x1 int, y1 int, x2 int, y2 int) {
+  xdiff := max(x1, x2) - min(x1, x2)
+  ydiff := max(y1, y2) - min(y1, y2)
+  xdir := if x1 <= x2 { 1 } else { -1 }
+  ydir := if y1 <= y2 { 1 } else { -1 }
+
+	r := max(xdiff, ydiff)
+
+	for index in 0..r+1 {
+		mut x := x1
+		mut y := y1
+
+		if ydiff != 0 { y += int((f32(index) * ydiff) / r * ydir) }
+		if xdiff != 0 { x += int((f32(index) * xdiff) / r * xdir) }
+
+		canvas.set(x, y)
+	}
+}
+
+pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius int) {
+	degree := f32(360) / sides
+
+	for index in 0..sides {
+		a := index * degree
+		b := (index + 1) * degree
+		x1 := int((center_x + math.cos(math.radians(a))) * (radius + 1) / 2)
+		y1 := int((center_y + math.sin(math.radians(a))) * (radius + 1) / 2)
+		x2 := int((center_x + math.cos(math.radians(b))) * (radius + 1) / 2)
+		y2 := int((center_y + math.sin(math.radians(b))) * (radius + 1) / 2)
+
+    canvas.line(x1, y1, x2, y2)
+	}
 }
 
 pub fn (mut canvas Canvas) image(image stbi.Image) ! {
@@ -62,7 +101,7 @@ pub fn (mut canvas Canvas) image(image stbi.Image) ! {
 }
 
 pub fn (canvas &Canvas) str() string {
-	return canvas.output().map(
+	return canvas.rows().map(
 		fn (row []rune) string {
 			return row.map(
 				fn (r rune) string {
@@ -83,11 +122,13 @@ pub struct Canvas {
 const grayscale_ratio_red = 0.2126
 const grayscale_ratio_green = 0.7152
 const grayscale_ratio_blue = 0.0722
+
 /**
  * Maps each bit number in a dots byte (western reading order) to it's
  * corresponding bit number in the unicode Braille mapping.
  */
 const dots_to_braille = [u8(0), 3, 1, 4, 2, 5, 6, 7]
+
 /**
  * Maps each possible dots byte to an unicode rune.
  */
@@ -173,6 +214,7 @@ fn buffer_to_braille(buffer [][]bool, braille_mapping [256]rune) [][]rune {
   return output
 }
 
+/** Initialize an empty buffer */
 fn create_buffer(width int, height int) [][]bool {
  return [][]bool{len: height, init: []bool{len: width}}
 }
