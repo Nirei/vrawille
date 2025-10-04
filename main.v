@@ -239,5 +239,5 @@ fn create_buffer(width int, height int) [][]bool {
 
 pub fn (mut canvas Canvas) valid_coordinates(x int, y int) bool {
 	width, height := canvas.size()
-	return x > 0 && x < width && y > 0 && y < height
+	return x >= 0 && x < width && y >= 0 && y < height
 }
