@@ -71,12 +71,12 @@ pub fn (mut canvas Canvas) line(x1 int, y1 int, x2 int, y2 int) {
 
 // draws a polygon with its conter in the given position, the given number of
 // sides and the given radius of its circumcircle 
-pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius int) {
+pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius int, rotation f32) {
 	degree := f32(360) / sides
 
 	for index in 0..sides {
-		a := index * degree
-		b := (index + 1) * degree
+		a := index * degree + rotation
+		b := (index + 1) * degree + rotation
 		x1 := int(center_x + cos(radians(a)) * (radius + 1) / 2)
 		y1 := int(center_y + sin(radians(a)) * (radius + 1) / 2)
 		x2 := int(center_x + cos(radians(b)) * (radius + 1) / 2)
