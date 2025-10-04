@@ -1,41 +1,51 @@
 module vrawille
 
-import stbi
+import stbi { Image, resize_uint8 }
 import math { min, max }
 
+// Canvas.new creates a new canvas of the specified size
 pub fn Canvas.new(width int, height int) &Canvas {
 	return &Canvas { layers: create_buffer(width, height) }
 }
 
+// size returns a tuple with the dimensions of the canvas, first element
+// represents width and second, height
 pub fn (canvas Canvas) size() (int, int) {
 	return canvas.layers[0].len, canvas.layers.len
 }
 
+// rows returns an array of the rows in this canvas as arrays of runes 
 pub fn (canvas Canvas) rows() [][]rune {
 	return buffer_to_braille(canvas.layers, dots_to_braille_rune_map)
 }
 
+// clear erases the canvas completely
 pub fn (mut canvas Canvas) clear() {
 	width, height := canvas.size()
 	canvas.layers = create_buffer(width, height)
 }
 
+// get returns the status of the pixel in the given coordinates
 pub fn (mut canvas Canvas) get(x int, y int) bool {
 	return canvas.layers[y][x]
 }
 
+// set defines the status of the pixel in the given coordinates to active
 pub fn (mut canvas Canvas) set(x int , y int) {
 	canvas.layers[y][x] = true
 }
 
+// unset defines the status of the pixel in the given coordinates to inactive
 pub fn (mut canvas Canvas) unset(x int, y int) {
 	canvas.layers[y][x] = false
 }
 
+// toggle inverts the status of the pixel in the given coordinates
 pub fn (mut canvas Canvas) toggle(x int, y int) {
 	canvas.layers[y][x] = !canvas.layers[y][x]
 }
 
+// line draws a line of pixels from and to specified points
 pub fn (mut canvas Canvas) line(x1 int, y1 int, x2 int, y2 int) {
   xdiff := max(x1, x2) - min(x1, x2)
   ydiff := max(y1, y2) - min(y1, y2)
@@ -55,6 +65,8 @@ pub fn (mut canvas Canvas) line(x1 int, y1 int, x2 int, y2 int) {
 	}
 }
 
+// draws a polygon with its conter in the given position, the given number of
+// sides and the given radius of its circumcircle 
 pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius int) {
 	degree := f32(360) / sides
 
@@ -70,10 +82,11 @@ pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius
 	}
 }
 
-pub fn (mut canvas Canvas) image(image stbi.Image) ! {
+// image draws an stbi Image in the canvas resized to fit the whole canvas
+pub fn (mut canvas Canvas) image(image Image) ! {
 	width, height := canvas.size()
 	length := width * height
-	resized := stbi.resize_uint8(image, width, height)!
+	resized := resize_uint8(image, width, height)!
 	mut floating := []f64{len: length}
 	unsafe {
 		for index in 0..length { floating[index] = f64(resized.data[index]) / 255.0  }
@@ -100,6 +113,7 @@ pub fn (mut canvas Canvas) image(image stbi.Image) ! {
 	}
 }
 
+// str transforms this canvas contents to a multiline string
 pub fn (canvas &Canvas) str() string {
 	return canvas.rows().map(
 		fn (row []rune) string {

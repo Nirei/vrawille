@@ -16,6 +16,11 @@ from scratch.
 ⠀⠀⠀⠀⠈⠛⠿⣿⣾⣿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀
 ```
 
+Vrawille also supports rendering images loaded through stbi in the terminal:
+
+![Digital drawing of an anime girl with wolf ears rendered entirely using Braille characters](docs/demo.png)
+
+
 ## Installation
 
 The easiest way to get vrawille is using vpm:
