@@ -79,3 +79,6 @@ Feel free to submit Issues and Pull Requests to [vrawille's repository](https://
 
 Vrawille is Free Software, licensed under the terms of the Apache License 2.0
 of which you can find a copy in our [LICENSE](LICENSE) file.
+
+Image ["Holo's Gaze"](https://www.deviantart.com/aratalab/art/Holo-s-Gaze-1154580455) by Arata Lab, used in the examples
+is licensed under CC BY NC ND 3.0.

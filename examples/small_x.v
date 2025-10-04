@@ -1,5 +1,8 @@
 import nirei.vrawille
 
+/**
+ * Draws a small X through `canvas.set()`
+ */
 fn main() {
   width, height := 48, 48
   mut canvas := vrawille.Canvas.new(width, height)

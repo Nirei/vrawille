@@ -1,5 +1,8 @@
 import nirei.vrawille
 
+/**
+ * Draws a crescent moon through `canvas.set()` and some math
+ */
 fn main() {
   width, height := 48, 48
   mut canvas := vrawille.Canvas.new(width, height)
