@@ -77,10 +77,10 @@ pub fn (mut canvas Canvas) polygon(center_x int, center_y int, sides int, radius
 	for index in 0..sides {
 		a := index * degree
 		b := (index + 1) * degree
-		x1 := int((center_x + cos(radians(a))) * (radius + 1) / 2)
-		y1 := int((center_y + sin(radians(a))) * (radius + 1) / 2)
-		x2 := int((center_x + cos(radians(b))) * (radius + 1) / 2)
-		y2 := int((center_y + sin(radians(b))) * (radius + 1) / 2)
+		x1 := int(center_x + cos(radians(a)) * (radius + 1) / 2)
+		y1 := int(center_y + sin(radians(a)) * (radius + 1) / 2)
+		x2 := int(center_x + cos(radians(b)) * (radius + 1) / 2)
+		y2 := int(center_y + sin(radians(b)) * (radius + 1) / 2)
 
     canvas.line(x1, y1, x2, y2)
 	}
